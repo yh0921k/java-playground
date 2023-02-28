@@ -7,10 +7,8 @@ import java.util.concurrent.TimeUnit;
 public class CompletableFutureApplication {
   public static void main(String[] args) {
     ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-    executorService.schedule(getRunnable("Hello"), 3, TimeUnit.SECONDS);
-    executorService.schedule(getRunnable("Hi"), 1, TimeUnit.SECONDS);
-
-    executorService.shutdown();
+    executorService.scheduleAtFixedRate(getRunnable("Hello"), 0, 3, TimeUnit.SECONDS);
+    executorService.scheduleAtFixedRate(getRunnable("Hi"), 0, 1, TimeUnit.SECONDS);
   }
 
   private static Runnable getRunnable(String message) {
