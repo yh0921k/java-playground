@@ -1,16 +1,14 @@
 package java8to11.completable_future;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class CompletableFutureApplication {
   public static void main(String[] args) {
-    ExecutorService executorService = Executors.newFixedThreadPool(2);
-    executorService.submit(getRunnable("Hello"));
-    executorService.submit(getRunnable("Hi"));
-    executorService.submit(getRunnable("Java"));
-    executorService.submit(getRunnable("Thread"));
-    executorService.submit(getRunnable("ExecutorService"));
+    ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    executorService.schedule(getRunnable("Hello"), 3, TimeUnit.SECONDS);
+    executorService.schedule(getRunnable("Hi"), 1, TimeUnit.SECONDS);
 
     executorService.shutdown();
   }
