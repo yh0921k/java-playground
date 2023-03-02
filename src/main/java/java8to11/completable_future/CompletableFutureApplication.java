@@ -9,16 +9,20 @@ public class CompletableFutureApplication {
   public static void main(String[] args) throws ExecutionException, InterruptedException {
     ExecutorService executorService = Executors.newFixedThreadPool(4);
 
-    CompletableFuture<Void> future =
+    CompletableFuture<String> future =
         CompletableFuture.supplyAsync(
                 () -> {
                   System.out.println("Hello : " + Thread.currentThread().getName());
                   return "Hello";
                 },
                 executorService)
-            .thenRun(
-                () -> {
+            .thenApplyAsync(
+                (s) -> {
                   System.out.println("Hello : " + Thread.currentThread().getName());
-                });
+                  return s.toUpperCase();
+                },
+                executorService);
+
+    System.out.println("future.get() = " + future.get());
   }
 }
