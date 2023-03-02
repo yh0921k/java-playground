@@ -11,8 +11,8 @@ public class CompletableFutureApplication {
                   System.out.println("Hello : " + Thread.currentThread().getName());
                   return "Hello";
                 })
-            .thenAccept(
-                (s) -> {
+            .thenRun(
+                () -> {
                   System.out.println("Hello : " + Thread.currentThread().getName());
                 });
   }
