@@ -2,6 +2,7 @@ package java8to11.completable_future;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+
 public class CompletableFutureApplication {
   public static void main(String[] args) throws ExecutionException, InterruptedException {
     boolean throwError = true;
@@ -15,7 +16,13 @@ public class CompletableFutureApplication {
                   System.out.println("Hello : " + Thread.currentThread().getName());
                   return "Hello";
                 })
-            .exceptionally(ex -> "Error!");
+            .handle(
+                (result, exception) -> {
+                  if (exception != null) {
+                    return "Error!";
+                  }
+                  return result;
+                });
 
     System.out.println("hello.get() = " + hello.get());
   }
