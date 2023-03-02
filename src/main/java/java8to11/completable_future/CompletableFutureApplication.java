@@ -5,14 +5,15 @@ import java.util.concurrent.ExecutionException;
 
 public class CompletableFutureApplication {
   public static void main(String[] args) throws ExecutionException, InterruptedException {
-    CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
-      System.out.println("Hello : " + Thread.currentThread().getName());
-      return "Hello";
-    }).thenApply((s) -> {
-      System.out.println("Hello : " + Thread.currentThread().getName());
-      return s.toUpperCase();
-    });
-
-    System.out.println("future.get() = " + future.get());
+    CompletableFuture<Void> future =
+        CompletableFuture.supplyAsync(
+                () -> {
+                  System.out.println("Hello : " + Thread.currentThread().getName());
+                  return "Hello";
+                })
+            .thenAccept(
+                (s) -> {
+                  System.out.println("Hello : " + Thread.currentThread().getName());
+                });
   }
 }
