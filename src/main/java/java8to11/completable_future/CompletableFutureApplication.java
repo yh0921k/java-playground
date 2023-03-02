@@ -12,15 +12,15 @@ public class CompletableFutureApplication {
               return "Hello";
             });
 
-    CompletableFuture<String> future = hello.thenCompose(CompletableFutureApplication::getMessage);
-    System.out.println("future.get() = " + future.get());
-  }
+    CompletableFuture<String> world =
+        CompletableFuture.supplyAsync(
+            () -> {
+              System.out.println("World : " + Thread.currentThread().getName());
+              return "World";
+            });
 
-  private static CompletableFuture<String> getMessage(String message) {
-    return CompletableFuture.supplyAsync(
-        () -> {
-          System.out.println("World : " + Thread.currentThread().getName());
-          return message + "World";
-        });
+    CompletableFuture<String> future =
+        hello.thenCombine(world, (result1, result2) -> result1 + result2);
+    System.out.println("future.get() = " + future.get());
   }
 }
