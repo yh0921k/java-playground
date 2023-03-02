@@ -1,10 +1,7 @@
 package java8to11.completable_future;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 public class CompletableFutureApplication {
   public static void main(String[] args) throws ExecutionException, InterruptedException {
@@ -22,17 +19,8 @@ public class CompletableFutureApplication {
               return "World";
             });
 
-    List<CompletableFuture<String>> futures = Arrays.asList(hello, world);
-    CompletableFuture[] futuresArray = futures.toArray(new CompletableFuture[futures.size()]);
-
-    CompletableFuture<List<String>> futureList =
-        CompletableFuture.allOf(futuresArray)
-            .thenApply(
-                v -> futures.stream().map(CompletableFuture::join).collect(Collectors.toList()));
-
-    List<String> results = futureList.get();
-    for (String result : results) {
-      System.out.println("result = " + result);
-    }
+    CompletableFuture<Void> future =
+        CompletableFuture.anyOf(hello, world).thenAccept((s) -> System.out.println("s = " + s));
+    System.out.println("future.get() = " + future.get());
   }
 }
