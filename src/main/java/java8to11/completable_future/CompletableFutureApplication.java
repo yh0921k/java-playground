@@ -11,10 +11,13 @@ public class CompletableFutureApplication {
       return "Hello";
     };
 
-    Future<String> submit = executorService.submit(task);
-
+    Future<String> future = executorService.submit(task);
+    System.out.println(future.isDone());
     System.out.println("Started");
-    String result = submit.get();
+
+    String result = future.get();
+
+    System.out.println(future.isDone());
     System.out.println("result = " + result);
     System.out.println("End");
 
