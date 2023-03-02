@@ -1,18 +1,36 @@
 package java8to11.completable_future;
 
+import java.util.Arrays;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class CompletableFutureApplication {
-  public static void main(String[] args) {
-    ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-    executorService.scheduleAtFixedRate(getRunnable("Hello"), 0, 3, TimeUnit.SECONDS);
-    executorService.scheduleAtFixedRate(getRunnable("Hi"), 0, 1, TimeUnit.SECONDS);
-  }
+  public static void main(String[] args) throws ExecutionException, InterruptedException {
+    ExecutorService executorService = Executors.newFixedThreadPool(3);
 
-  private static Runnable getRunnable(String message) {
-    return () -> System.out.println(message + " : " + Thread.currentThread().getName());
+    Callable<String> hello =
+        () -> {
+          Thread.sleep(2000L);
+          return "Hello";
+        };
+
+    Callable<String> java =
+        () -> {
+          Thread.sleep(3000L);
+          return "Java";
+        };
+
+    Callable<String> callable =
+        () -> {
+          Thread.sleep(1000L);
+          return "Callable";
+        };
+
+    String result = executorService.invokeAny(Arrays.asList(hello, java, callable));
+    System.out.println("result = " + result);
+
+    executorService.shutdown();
   }
 }
-
