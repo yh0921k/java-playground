@@ -2,27 +2,28 @@ package java8to11.completable_future;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class CompletableFutureApplication {
   public static void main(String[] args) throws ExecutionException, InterruptedException {
-    ExecutorService executorService = Executors.newFixedThreadPool(4);
+    boolean throwError = true;
 
-    CompletableFuture<String> future =
+    CompletableFuture<String> hello =
         CompletableFuture.supplyAsync(
                 () -> {
+                  if (throwError) {
+                    throw new IllegalArgumentException();
+                  }
                   System.out.println("Hello : " + Thread.currentThread().getName());
                   return "Hello";
-                },
-                executorService)
-            .thenApplyAsync(
-                (s) -> {
-                  System.out.println("Hello : " + Thread.currentThread().getName());
-                  return s.toUpperCase();
-                },
-                executorService);
+                })
+            .handle(
+                (result, exception) -> {
+                  if (exception != null) {
+                    return "Error!";
+                  }
+                  return result;
+                });
 
-    System.out.println("future.get() = " + future.get());
+    System.out.println("hello.get() = " + hello.get());
   }
 }
